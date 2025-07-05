@@ -13,6 +13,7 @@ class user_list(BaseModel):
 
 class ApiResponse(baseModel):
     most_similar_name: str
+    most_similar_name_user_id: int
     status: str
     score: float
 
@@ -29,10 +30,12 @@ async def read_item(message : user_list):
             fuzzy_ratios[i] = fuzz.ratio(user_names, target_name)
     
         max_ratio_idx = np.argmax(fuzzy_ratios)
+        most_similar_name = user_names[max_ratio_idx]
     
 
         return ApiResponse(
-            most_similar_name = user_list_info[user_names[max_ratio_idx]],
+            most_similar_name = most_similar_name,
+            most_similar_name_user_id = user_list_info[most_similar_name],
             status = "success",
             score = fuzzy_ratios[max_ratio_idx]
         )
